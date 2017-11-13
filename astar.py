@@ -4,7 +4,7 @@ import math
 pygame.init()
 
 # Extra bias towards Heuristic Value
-# Try 1, 1.2, 1.5, and 2
+# Try 1, 1.2, 1.5, 2, and 10
 bias = 1.2
 
 def heuristic_Cost(start,goal):
@@ -47,22 +47,24 @@ square_offset = 16
 
 
 # Collision Matrix
-collisions =   [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],\
-                [0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],\
-                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+
+collisions =   [[0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0],\
+                [0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,0],\
+                [0,0,0,1,0,1,0,1,0,1,0,0,0,0,1,0],\
+                [0,1,0,0,0,0,0,0,0,1,0,1,1,0,1,0],\
+                [1,1,1,0,1,1,1,1,0,0,0,0,1,0,1,0],\
+                [0,0,0,0,1,0,0,0,0,1,1,0,1,1,1,1],\
+                [0,1,1,0,1,0,1,0,1,1,0,0,0,0,1,0],\
+                [0,1,0,0,0,0,0,0,0,1,1,1,1,0,1,0],\
+                [0,1,0,1,1,1,0,1,0,1,0,1,0,0,0,0],\
+                [0,0,0,1,0,1,0,1,0,1,0,0,0,1,1,0],\
+                [0,1,0,0,0,1,0,1,0,1,0,1,1,1,1,0],\
+                [0,1,0,1,0,1,0,1,0,1,0,0,0,0,1,0],\
+                [1,1,0,1,0,1,0,1,0,0,0,1,1,0,1,1],\
+                [0,0,0,0,0,1,0,1,0,1,0,0,1,0,0,0],\
+                [0,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1],\
+                [0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0]]
+
 # Takes the transpose of the matrix above because xy is wierd
 collisions = list(map(list,zip(*collisions)))
 
@@ -74,10 +76,10 @@ goal = (15,15)
 start = (square_x,square_y)
 
 # Set of nodes already evaluated
-closedSet = []
+closedSet = set()
 
 # Set of nodes to be evaluated
-openSet = [start]
+openSet = {start}
 
 # For recovering the shortest Path
 cameFrom = [[(math.inf,math.inf) for x in range(16)]for y in range(16)]
@@ -137,8 +139,8 @@ while not done:
                         found = True
 
 
-                    openSet.remove(current)
-                    closedSet.append(current)
+                    openSet.discard(current)
+                    closedSet.add(current)
 
                     # Look at all possible Neighbors
                     for neighbor in getNeighbors(current):
@@ -149,7 +151,7 @@ while not done:
 
                         # If not looked at, add to openList
                         if neighbor not in openSet:
-                            openSet.append(neighbor)
+                            openSet.add(neighbor)
 
                         # If already looked at, check if score needs updating
                         tentative_gScore = gScore[current[0]][current[1]] + 1
