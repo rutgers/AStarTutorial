@@ -5,7 +5,7 @@ pygame.init()
 
 # Extra bias towards Heuristic Value
 # Try 1, 1.2, 1.5, 2, and 10
-bias = 1.2
+bias = 2
 
 def heuristic_Cost(start,goal):
     return math.sqrt(abs(goal[0] - start[0])**2 + abs(goal[1] - start[1])**2) * bias
@@ -64,6 +64,7 @@ collisions =   [[0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0],\
                 [0,0,0,0,0,1,0,1,0,1,0,0,1,0,0,0],\
                 [0,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1],\
                 [0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,0]]
+
 
 # Takes the transpose of the matrix above because xy is wierd
 collisions = list(map(list,zip(*collisions)))
